@@ -47,11 +47,17 @@ opencode4ivybridge/
 
 ## Quick Start
 
-### Prerequisites
+### 1. Clone This Project
 
 ```bash
-# Ensure you have a working bun binary (baseline build)
-# Option A: Build from source
+git clone https://github.com/sxgou/opencode4ivybridge.git
+cd opencode4ivybridge
+```
+
+### 2. Ensure bun Is Available
+
+```bash
+# Option A: Build bun from source
 cd ../bun4ivybridge && bash scripts/build.sh --yes
 
 # Option B: Download prebuilt binary
@@ -60,9 +66,11 @@ cd ../bun4ivybridge && bash scripts/build.sh --yes
 # Verify bun works on this CPU
 bun --version          # Should not crash with SIGILL
 bun -e 'console.log("ok")'  # Basic execution test
+
+cd ../opencode4ivybridge
 ```
 
-### Using setup.sh
+### 3. Run Setup Script
 
 ```bash
 # Default install to ~/.local/share/opencode
@@ -78,9 +86,26 @@ bash scripts/setup.sh
 # BATCH_MODE=1 bash scripts/setup.sh
 ```
 
-### Manual Setup
+### 4. Verify
 
-### 1. Clone OpenCode
+```bash
+opencode --version
+# Expected: e.g. 1.17.8 (actual version)
+
+opencode --help
+# Expected: OpenCode help information
+```
+
+## Manual Setup
+
+### 1. Clone This Project
+
+```bash
+git clone https://github.com/sxgou/opencode4ivybridge.git
+cd opencode4ivybridge
+```
+
+### 2. Clone OpenCode
 
 ```bash
 mkdir -p ~/.local/share/opencode
@@ -91,14 +116,14 @@ git clone https://github.com/sst/opencode.git .
 # git checkout v1.17.8
 ```
 
-### 2. Install Dependencies
+### 3. Install Dependencies
 
 ```bash
 cd ~/.local/share/opencode/packages/opencode
 bun install
 ```
 
-### 3. Create Wrapper Script
+### 4. Create Wrapper Script
 
 ```bash
 # Using the portable wrapper template (recommended)
@@ -114,13 +139,13 @@ chmod +x ~/.local/bin/opencode
 export PATH="$HOME/.local/bin:$PATH"
 ```
 
-### 4. Optional Symlink
+### 5. Optional Symlink
 
 ```bash
 ln -sf ~/.local/bin/opencode ~/.bun/bin/opencode
 ```
 
-### 5. Verify
+### 6. Verify
 
 ```bash
 opencode --version
