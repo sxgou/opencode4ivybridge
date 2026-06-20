@@ -2,11 +2,24 @@
 
 Run OpenCode (AI coding assistant CLI) on Ivy Bridge CPUs using a self-compiled bun, bypassing compatibility issues with prebuilt binaries.
 
-## Environment
+## Environment Requirements
 
-- **CPU**: Intel Xeon E5-2696 v2 (Ivy Bridge, 2013)
-- **OS**: macOS 12+ (Monterey, verified 12.7.6)
-- **Runtime**: Requires self-compiled bun (see `../bun4ivybridge/`)
+| Requirement | Version | Notes |
+|-------------|---------|-------|
+| **CPU** | Intel x86-64 (Nehalem+, e.g. Ivy Bridge) | Must support at least SSE4.2. No AVX2/BMI2 required. |
+| **OS** | macOS 12+ (Monterey, verified 12.7.6) | Other OS untested. |
+| **Bun runtime** | >= 1.4.0 (self-compiled baseline build) | Use `../bun4ivybridge/` to build from source. Prebuilt binary also available. |
+| **Git** | Any version | For cloning OpenCode from GitHub. |
+| **Network** | Internet access | Required for `git clone` and `bun install`. |
+
+### Prerequisite: bun Binary
+
+This project does **not** compile bun itself. You must obtain a bun binary that works on your CPU:
+
+| Option | Source | Notes |
+|--------|--------|-------|
+| **A) Self-compiled** | [bun4ivybridge](https://github.com/sxgou/bun4ivybridge) | Build from source with `--baseline=true`. Recommended. |
+| **B) Prebuilt binary** | [bun4ivybridge Releases](https://github.com/sxgou/bun4ivybridge/releases) | True baseline macOS x86-64 binary, works on all Intel Macs. |
 
 > ⚠️ **Compatibility**
 > - This project only involves configuring bun runtime parameters and creating wrapper scripts — no compilation needed
@@ -32,12 +45,22 @@ opencode4ivybridge/
     └── opencode-wrapper.sh            # Portable wrapper template
 ```
 
-## Prerequisites
-
-- **bun**: Must be a source-compiled version compatible with Ivy Bridge. See `../bun4ivybridge/README.md`
-- **git**: For cloning OpenCode from GitHub
-
 ## Quick Start
+
+### Prerequisites
+
+```bash
+# Ensure you have a working bun binary (baseline build)
+# Option A: Build from source
+cd ../bun4ivybridge && bash scripts/build.sh --yes
+
+# Option B: Download prebuilt binary
+#   https://github.com/sxgou/bun4ivybridge/releases
+
+# Verify bun works on this CPU
+bun --version          # Should not crash with SIGILL
+bun -e 'console.log("ok")'  # Basic execution test
+```
 
 ### Using setup.sh
 
@@ -47,6 +70,12 @@ bash scripts/setup.sh
 
 # Custom paths
 # OPENCODE_DIR=/opt/opencode BUN_PATH=/opt/bun/bin/bun bash scripts/setup.sh
+
+# Pin to a specific opencode version
+# OPENCODE_TAG=v1.17.8 bash scripts/setup.sh
+
+# Unattended mode
+# BATCH_MODE=1 bash scripts/setup.sh
 ```
 
 ### Manual Setup
@@ -57,6 +86,9 @@ bash scripts/setup.sh
 mkdir -p ~/.local/share/opencode
 cd ~/.local/share/opencode
 git clone https://github.com/sst/opencode.git .
+
+# Optionally pin to a specific version:
+# git checkout v1.17.8
 ```
 
 ### 2. Install Dependencies
@@ -144,8 +176,8 @@ bun run --define:OPENCODE_VERSION="1.17.8" ./src/index.ts
 ## Quick Rebuild Reference
 
 ```bash
-# 1. Ensure bun is available
-bun --version
+# 1. Verify bun works on this CPU
+bun -e 'console.log("ok")'
 
 # 2. Clone OpenCode
 mkdir -p ~/.local/share/opencode
