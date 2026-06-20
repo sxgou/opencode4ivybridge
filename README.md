@@ -126,12 +126,20 @@ bun install
 ### 4. Create Wrapper Script
 
 ```bash
-# Using the portable wrapper template (recommended)
-cp /path/to/opencode4ivybridge/scripts/opencode-wrapper.sh ~/.local/bin/opencode
+# Using the portable wrapper template with variable substitution
+mkdir -p ~/.local/bin
+BUN_PATH="${BUN_PATH:-$HOME/.bun/bin/bun}"
+OPENCODE_DIR="${OPENCODE_DIR:-$HOME/.local/share/opencode}"
+
+sed -e "s|\${BUN:-\$HOME/.bun/bin/bun}|$BUN_PATH|g" \
+    -e "s|\${OPENCODE_DIR:-\$HOME/.local/share/opencode}|$OPENCODE_DIR|g" \
+    -e "s|\$HOME|$HOME|g" \
+    /path/to/opencode4ivybridge/scripts/opencode-wrapper.sh > ~/.local/bin/opencode
+
 chmod +x ~/.local/bin/opencode
 
-# Customize:
-# BUN=/opt/bun/bin/bun opencode
+# Or simply use the automated setup script instead:
+# bash /path/to/opencode4ivybridge/scripts/setup.sh
 ```
 
 **Ensure `~/.local/bin` is in your PATH**. Add to `~/.zshrc` if needed:
